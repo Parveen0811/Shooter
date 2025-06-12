@@ -1,25 +1,48 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public FixedJoystick joyStick; 
-    public float speed = 5f;
+    
+    public FixedJoystick joystick;
+    public float Speed = 5f;
     private CharacterController controller;
-    private Animator animator; // Add this
 
+    private float Gravity = -9.81f;
+    public float GroundDistance = 0.3f;
+    public LayerMask layermask;
+    Vector3 velocity;
+    public float jumpheight = 3f;
+
+    public bool isGround;
+    public bool Pressed;
     void Start()
     {
-        controller = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>(); // Add this
+        controller= GetComponent<CharacterController>();
     }
+
     
     void Update()
     {
-        Vector3 Move = transform.right * joyStick.Horizontal + transform.forward * joyStick.Vertical;
-        controller.Move(Move * speed * Time.deltaTime);
+        isGround = Physics.Raycast(transform.position, Vector3.down, GroundDistance, layermask);
 
-        // Animation control
-        bool isRunning = Move.magnitude > 0.1f;
-        animator.SetBool("isRunning", isRunning); // "isRunning" should match your Animator parameter
+        if (isGround && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+
+        Vector3 Move = transform.right * joystick.Horizontal + transform.forward * joystick.Vertical;
+        controller.Move(Move * Speed * Time.deltaTime);
+
+
+        if (isGround && Pressed)
+        {
+            velocity.y = Mathf.Sqrt(jumpheight * -2f * Gravity);
+            isGround = false;
+        }
+
+        velocity.y += Gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
 }
