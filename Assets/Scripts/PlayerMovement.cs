@@ -29,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+
+        joystick = FindFirstObjectByType<FixedJoystick>();
+
     }
 
 

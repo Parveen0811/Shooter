@@ -8,6 +8,14 @@ public class TouchController : MonoBehaviour
     public FixedButton fixedButton;
     public FireButton fireButton;
 
+    void Start()
+    {
+        // Initialize any necessary components or settings here if needed
+        touchField = FindFirstObjectByType<FixedTouchField>();
+        fixedButton = FindFirstObjectByType<FixedButton>();
+        fireButton = FindFirstObjectByType<FireButton>();
+    }
+
     void Update()
     {
         cameraLook.lockAxis = touchField.TouchDist;
